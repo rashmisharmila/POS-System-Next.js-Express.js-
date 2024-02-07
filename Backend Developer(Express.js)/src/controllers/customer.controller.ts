@@ -12,7 +12,7 @@ router.get('/getAllCustomer', async (req, res) => {
             new CustomResponse(200, "All Customer Details", customer)
         )
     } catch (err) {
-        res.status(100).send("Error");
+        res.status(500).send("Internal Server Error");
     }
 
 });
@@ -35,18 +35,18 @@ router.put('/:id', async (req, res) => {
     const affectedRows = await CustomerService.saveCustomerOrupdateCustomer(req.body,customerId);
 
     if (affectedRows == 0) {
-        res.status(404).json(`No record with given id: ${req.params.id}`);
+        new CustomResponse(404, "Tray Again.Customer Details not updated..!");
     } else {
-        res.send('Updated successfully.');
+        new CustomResponse(200, 'Updated successfully.');
     }
 });
 
 router.delete('/:id', async (req, res) => {
     const customerId:number = parseInt(req.params.id, 10);
     const affecedRows = await CustomerService.deleteCustomer(customerId);
-    
+
     if (affecedRows == 0) {
-        res.status(100).send("Error" + customerId);
+        new CustomResponse(404, "Tray Again.Customer Details not updated..!"+customerId);
     } else {
         res.status(200).send(
             new CustomResponse(200, "deleted successfully.")
