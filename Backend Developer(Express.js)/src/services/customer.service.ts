@@ -5,18 +5,30 @@ import db from '../dbConnection/db';
     return records;
 };
 
-
- const saveCustomerOrupdateCustomer = async (obj:any,id=0) => {
-    const  [records] = await db.query("CALL ups_customer_add_or_edit(?,?,?,?,?)",
-    [obj.customerId,obj.Name,obj.address,obj.email,obj.phoneNumber]);
-
-    if('affectedRows' in records){
-        return records.affectedRows as number;
-    }
-    return 0;
+ const saveCustomerOrupdateCustomer = async (obj:any,customerId=0) => {
+   const result = await db.query("CALL customer_add_or_edit(?,?,?,?,?)", [
+        customerId,
+        obj.Name,
+        obj.address,
+        obj.email,
+        obj.phoneNumber
+    ]);
+    
+    const affectedRows: number = (result[0] as any)?.affectedRows;
+    return affectedRows;
+    
+    
 };
+
+const deleteCustomer = async (customerId: number): Promise<number> => {
+    const result = await db.query("DELETE FROM customer WHERE customerId = ?", [customerId]);
+    const affectedRows: number = (result[0] as any)?.affectedRows;
+    return affectedRows;
+};
+
 
 export default {
     getAllCustomer,
     saveCustomerOrupdateCustomer,
+    deleteCustomer
 };
