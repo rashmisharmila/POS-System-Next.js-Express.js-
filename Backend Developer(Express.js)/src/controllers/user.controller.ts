@@ -47,49 +47,37 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/auth', async (req, res) => {
     try {
+        
         const user = await UserService.authUser(req.body);
         if (user) {
+
             const isMatch = await bcrypt.compare(req.body.password, user.password);
             if (isMatch) {
-                user.password = '';
+                user.password = " ";
                 const expiresIn = '1w';
                 jwt.sign({ user }, process.env.SECRET as Secret, { expiresIn }, (err: any, token: any) => {
                     if (err) {
-                        res.status(500).send({
-                            statusCode: 500,
-                            message: 'Something went wrong',
-                        });
+                        res.status(500).send(new CustomResponse(500, "Internal Server Error" + err));
                     } else {
                         const res_body = {
                             user: user,
                             accessToken: token,
                         };
-                        res.status(200).send({
-                            statusCode: 200,
-                            message: 'Access',
-                            data: res_body,
-                        });
+                        res.status(200).send(new CustomResponse(200, "Access", res_body));
                     }
                 });
             } else {
-                res.status(401).send({
-                    statusCode: 401,
-                    message: 'Invalid credentials',
-                });
+                res.status(401).send(new CustomResponse(401, "Invalid credentials"));
             }
+
         } else {
-            res.status(404).send({
-                statusCode: 404,
-                message: 'User not found',
-            });
+            res.status(404).send(new CustomResponse(404, "User Not found"));
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send({
-            statusCode: 500,
-            message: 'Error',
-        });
+        res.status(500).send(new CustomResponse(500, "Internal Server Error" + error));
     }
 });
+
 
 export default router

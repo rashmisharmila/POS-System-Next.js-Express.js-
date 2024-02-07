@@ -7,8 +7,8 @@ const getAllUser = async () => {
 };
 
 const saveUser = async (obj: any,hashedPassword: any) => {
-    const result = await db.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)',
-     [obj.username, obj.email, hashedPassword]);
+    const result = await db.query('INSERT INTO user (name, email, password) VALUES (?, ?, ?)',
+     [obj.name, obj.email, hashedPassword]);
 
     const affectedRows: number = (result[0] as any)?.affectedRows;
     return affectedRows;
