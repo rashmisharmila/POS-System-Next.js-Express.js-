@@ -3,6 +3,7 @@ import db from '../src/dbConnection/db';
 import CustomerController from '../src/controllers/customer.controller';
 import ItemController from '../src/controllers/items.controller';
 import OrderController from '../src/controllers/order.controller';
+import UserController from '../src/controllers/user.controller';
 
 import bodyParser from 'body-parser';
 
@@ -24,6 +25,7 @@ db.query('SELECT 1')
 app.use('/customer', CustomerController);
 app.use('/item', ItemController);
 app.use('/order', OrderController);
+app.use('/user', UserController);
 
 app.use((err:any,req:any,res:any,next:any)=>{
     console.log(err)
