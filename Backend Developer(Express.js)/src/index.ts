@@ -2,6 +2,8 @@ import express from 'express';
 import db from '../src/dbConnection/db';
 import CustomerController from '../src/controllers/customer.controller';
 import ItemController from '../src/controllers/items.controller';
+import OrderController from '../src/controllers/order.controller';
+
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -21,6 +23,7 @@ db.query('SELECT 1')
    
 app.use('/customer', CustomerController);
 app.use('/item', ItemController);
+app.use('/order', OrderController);
 
 app.use((err:any,req:any,res:any,next:any)=>{
     console.log(err)
